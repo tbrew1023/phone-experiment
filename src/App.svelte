@@ -1,16 +1,30 @@
 <script>
 	export let name; //prop
 
-	let rando; //component state <data() { return { rando: null  }>
+	import { fireFetch, firePost } from '../firebase';
 
-	/*function setRando() { //methods: {}
-		rando = Math.random();
-	}*/
+	//let db = firebase.firestore();
+	let people = []; //component state <data() { return { rando: null  }>
+
+	function fetchTestData() {
+		fireFetch('test-data', (docs) => {
+			docs.forEach((doc) => {
+				//people.push(doc.data());
+				people = [...people, doc.data()];
+			});
+		});
+	}
+	
 </script>
 
 <main>
 	<h1>Hello {name}!</h1>
 	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<button on:click={fetchTestData}>Fetch test data</button>
+	<h3>{people}</h3>
+	{#each people as person}
+		<h4>{person.name}</h4>
+	{/each}
 </main>
 
 <style type="text/scss">
